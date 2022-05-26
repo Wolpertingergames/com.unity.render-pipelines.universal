@@ -185,7 +185,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             m_UseSwapBuffer = false;
         }
 
-        public void SetupFinalPass(in RenderTargetHandle source, in RenderTextureDescriptor finalDesc = new RenderTextureDescriptor())
+        /*public void SetupFinalPass(in RenderTargetHandle source, in RenderTextureDescriptor finalDesc = new RenderTextureDescriptor())
         {
             m_Source = source.id;
             m_Destination = RenderTargetHandle.CameraTarget;
@@ -193,7 +193,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             m_HasFinalPass = false;
             m_EnableSRGBConversionIfNeeded = true;
             m_Descriptor = finalDesc;
-        }
+        }*/
         
         public void SetupFinalPass(in RenderTargetHandle source, bool useSwapBuffer = false)
         {

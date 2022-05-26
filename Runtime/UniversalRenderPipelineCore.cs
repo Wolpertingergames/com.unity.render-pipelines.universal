@@ -206,7 +206,7 @@ namespace UnityEngine.Rendering.Universal
         /// <summary>
         /// Camera position in world space.
         /// </summary>
-        public Vector3 worldSpaceCameraPos;
+        public Vector3 worldSpaceCameraPos;        
 
         public bool enableFSR;
     }
@@ -845,6 +845,8 @@ namespace UnityEngine.Rendering.Universal
         PaniniProjection,
         UberPostProcess,
         Bloom,
+        LensFlareDataDriven,
+        MotionVectors,
         FSR,
 
         FinalBlit
