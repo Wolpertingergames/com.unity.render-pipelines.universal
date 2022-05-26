@@ -47,6 +47,7 @@ namespace UnityEditor.Rendering.Universal
             public static GUIContent volumeTrigger = EditorGUIUtility.TrTextContent("Volume Trigger", "A transform that will act as a trigger for volume blending. If none is set, the camera itself will act as a trigger.");
 
             public static GUIContent renderPostProcessing = EditorGUIUtility.TrTextContent("Post Processing", "Enable this to make this camera render post-processing effects.");
+            public static GUIContent AMDFSR = EditorGUIUtility.TrTextContent("AMD FSR 1.0", "AMD FidelityFX Super Resolution 1.0 is a cutting edge super-optimized spatial upscaling technology that produces impressive image quality at fast framerates.");
             public static GUIContent antialiasing = EditorGUIUtility.TrTextContent("Anti-aliasing", "The anti-aliasing method to use.");
             public static GUIContent antialiasingQuality = EditorGUIUtility.TrTextContent("Quality", "The quality level to use for the selected anti-aliasing method.");
             public static GUIContent stopNaN = EditorGUIUtility.TrTextContent("Stop NaN", "Automatically replaces NaN/Inf in shaders by a black pixel to avoid breaking some effects. This will affect performances and should only be used if you experience NaN issues that you can't fix. Has no effect on GLES2 platforms.");
@@ -139,6 +140,7 @@ namespace UnityEditor.Rendering.Universal
         SerializedProperty m_AdditionalCameraDataVolumeLayerMask;
         SerializedProperty m_AdditionalCameraDataVolumeTrigger;
         SerializedProperty m_AdditionalCameraDataRenderPostProcessing;
+        SerializedProperty m_AdditionalCameraDataRenderAMDFSR;
         SerializedProperty m_AdditionalCameraDataAntialiasing;
         SerializedProperty m_AdditionalCameraDataAntialiasingQuality;
         SerializedProperty m_AdditionalCameraDataStopNaN;
@@ -416,6 +418,7 @@ namespace UnityEditor.Rendering.Universal
             m_AdditionalCameraDataVolumeLayerMask = m_AdditionalCameraDataSO.FindProperty("m_VolumeLayerMask");
             m_AdditionalCameraDataVolumeTrigger = m_AdditionalCameraDataSO.FindProperty("m_VolumeTrigger");
             m_AdditionalCameraDataRenderPostProcessing = m_AdditionalCameraDataSO.FindProperty("m_RenderPostProcessing");
+            m_AdditionalCameraDataRenderAMDFSR = m_AdditionalCameraDataSO.FindProperty("m_AMDFSR");
             m_AdditionalCameraDataAntialiasing = m_AdditionalCameraDataSO.FindProperty("m_Antialiasing");
             m_AdditionalCameraDataAntialiasingQuality = m_AdditionalCameraDataSO.FindProperty("m_AntialiasingQuality");
             m_AdditionalCameraDataStopNaN = m_AdditionalCameraDataSO.FindProperty("m_StopNaN");
@@ -820,6 +823,8 @@ namespace UnityEditor.Rendering.Universal
         void DrawPostProcessing()
         {
             EditorGUILayout.PropertyField(m_AdditionalCameraDataRenderPostProcessing, Styles.renderPostProcessing);
+            if (m_AdditionalCameraDataRenderPostProcessing.boolValue)
+                EditorGUILayout.PropertyField(m_AdditionalCameraDataRenderAMDFSR, Styles.AMDFSR);
 
             // Draw Final Post-processing
             DrawIntPopup(m_AdditionalCameraDataAntialiasing, Styles.antialiasing, Styles.antialiasingOptions, Styles.antialiasingValues);

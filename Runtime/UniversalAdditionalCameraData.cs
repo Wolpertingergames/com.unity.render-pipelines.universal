@@ -130,6 +130,15 @@ namespace UnityEngine.Rendering.Universal
         [SerializeField] Transform m_VolumeTrigger = null;
 
         [SerializeField] bool m_RenderPostProcessing = false;
+        public enum AMDFSR
+        {
+            Disabled = -1,
+            UltraQuality = 0,
+            Quality,
+            Balanced,
+            Performance
+        }
+        [SerializeField] AMDFSR m_AMDFSR = AMDFSR.Disabled;
         [SerializeField] AntialiasingMode m_Antialiasing = AntialiasingMode.None;
         [SerializeField] AntialiasingQuality m_AntialiasingQuality = AntialiasingQuality.High;
         [SerializeField] bool m_StopNaN = false;
@@ -355,6 +364,11 @@ namespace UnityEngine.Rendering.Universal
         {
             get => m_RenderPostProcessing;
             set => m_RenderPostProcessing = value;
+        }
+        public AMDFSR amdFSR
+        {
+            get => m_AMDFSR;
+            set => m_AMDFSR = value;
         }
 
         /// <summary>

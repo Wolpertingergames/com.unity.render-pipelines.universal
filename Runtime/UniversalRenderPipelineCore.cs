@@ -191,6 +191,8 @@ namespace UnityEngine.Rendering.Universal
         /// When rendering a stack of cameras only the last camera in the stack will resolve to camera target.
         /// </summary>
         public bool resolveFinalTarget;
+
+        public bool enableFSR;
     }
 
     [MovedFrom("UnityEngine.Rendering.LWRP")] public struct ShadowData
@@ -733,6 +735,7 @@ namespace UnityEngine.Rendering.Universal
         PaniniProjection,
         UberPostProcess,
         Bloom,
+        FSR,
 
         FinalBlit
     }

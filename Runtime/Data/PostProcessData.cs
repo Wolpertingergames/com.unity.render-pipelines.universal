@@ -64,6 +64,11 @@ namespace UnityEngine.Rendering.Universal
 
             [Reload("Shaders/PostProcessing/FinalPost.shader")]
             public Shader finalPostPassPS;
+
+            [Reload("Shaders/PostProcessing/EdgeAdaptiveSpatialUpsampling.compute")]
+            public ComputeShader easuCS;
+            [Reload("Shaders/PostProcessing/RobustContrastAdaptiveSharpen.compute")]
+            public ComputeShader rcasCS;
         }
 
         [Serializable, ReloadGroup]

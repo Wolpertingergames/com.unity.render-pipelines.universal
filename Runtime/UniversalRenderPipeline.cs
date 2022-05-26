@@ -487,6 +487,8 @@ namespace UnityEngine.Rendering.Universal
             // Update volumeframework before initializing additional camera data
             UpdateVolumeFramework(baseCamera, baseCameraAdditionalData);
             InitializeCameraData(baseCamera, baseCameraAdditionalData, !isStackedRendering, out var baseCameraData);
+            if (baseCameraAdditionalData.amdFSR != UniversalAdditionalCameraData.AMDFSR.Disabled && !isStackedRendering)
+                baseCameraData.enableFSR = true;
 
 #if ENABLE_VR && ENABLE_XR_MODULE
             var originalTargetDesc = baseCameraData.cameraTargetDescriptor;
@@ -555,6 +557,8 @@ namespace UnityEngine.Rendering.Universal
 #endif
                             UpdateVolumeFramework(currCamera, currCameraData);
                             InitializeAdditionalCameraData(currCamera, currCameraData, lastCamera, ref overlayCameraData);
+                        if (baseCameraAdditionalData.amdFSR != UniversalAdditionalCameraData.AMDFSR.Disabled && lastCamera)
+                            overlayCameraData.enableFSR = true;
 #if ENABLE_VR && ENABLE_XR_MODULE
                             if (baseCameraData.xr.enabled)
                                 m_XRSystem.UpdateFromCamera(ref overlayCameraData.xr, overlayCameraData);
@@ -689,6 +693,24 @@ namespace UnityEngine.Rendering.Universal
             cameraData.cameraTargetDescriptor = CreateRenderTextureDescriptor(camera, cameraData.renderScale,
                 cameraData.isHdrEnabled, msaaSamples, needsAlphaChannel, cameraData.requiresOpaqueTexture);
         }
+
+        private struct AMDFSRSettings
+        {
+            public readonly float m_RenderScale;
+            public readonly float m_MipmapBias;
+            public AMDFSRSettings(in float render_scale, in float mipmap_bias)
+            {
+                m_RenderScale = render_scale;
+                m_MipmapBias = mipmap_bias;
+            }
+        };
+        private static readonly AMDFSRSettings[] amdFSRSettingsPreset = new AMDFSRSettings[]
+        {
+            new AMDFSRSettings(.77f, -.38f),
+            new AMDFSRSettings(.67f, -.58f),
+            new AMDFSRSettings(.59f, -.79f),
+            new AMDFSRSettings(.50f, -1.0f)
+        };
 
         /// <summary>
         /// Initialize camera data settings common for all cameras in the stack. Overlay cameras will inherit
@@ -860,6 +882,17 @@ namespace UnityEngine.Rendering.Universal
             }
 
             cameraData.SetViewAndProjectionMatrix(camera.worldToCameraMatrix, projectionMatrix);
+
+            if (additionalCameraData != null)
+            {
+                if (additionalCameraData.amdFSR != UniversalAdditionalCameraData.AMDFSR.Disabled)
+                {
+                    settings.msaaSampleCount = 8; // NOTE! You can also use some other AA solutions.
+                    var amdFSRSetting = amdFSRSettingsPreset[(int)additionalCameraData.amdFSR];
+                    cameraData.renderScale = amdFSRSetting.m_RenderScale;
+                    Shader.SetGlobalFloat("amd_fsr_mipmap_bias", amdFSRSetting.m_MipmapBias);
+                }
+            }
         }
 
         static void InitializeRenderingData(UniversalRenderPipelineAsset settings, ref CameraData cameraData, ref CullingResults cullResults,

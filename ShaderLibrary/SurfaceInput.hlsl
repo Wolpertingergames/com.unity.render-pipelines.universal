@@ -30,7 +30,11 @@ half Alpha(half albedoAlpha, half4 color, half cutoff)
 
 half4 SampleAlbedoAlpha(float2 uv, TEXTURE2D_PARAM(albedoAlphaMap, sampler_albedoAlphaMap))
 {
+#ifdef _AMD_FSR
+    return SAMPLE_TEXTURE2D_BIAS(albedoAlphaMap, sampler_albedoAlphaMap, uv, amd_fsr_mipmap_bias);
+#else
     return SAMPLE_TEXTURE2D(albedoAlphaMap, sampler_albedoAlphaMap, uv);
+#endif
 }
 
 half3 SampleNormal(float2 uv, TEXTURE2D_PARAM(bumpMap, sampler_bumpMap), half scale = 1.0h)
